@@ -1,0 +1,2 @@
+export const SET_MY_DOCUMENTS = 'SET_MY_DOCUMENTS';
+export const SET_DOCUMENT_ROWS = 'SET_DOCUMENT_ROWS';

@@ -1,0 +1,149 @@
+          <div className="custom-container-title" id="table-header">
+            {/*this.this.props.type*/}
+            <div>
+              <span>{title}</span>
+            </div>
+            <div>
+              <div style={(isViewSearch)?{}:{display:"none"}}>
+                <Search
+                  title={"Search " + title}
+                  options={(this.props.search)?this.props.search.options:[]}
+                  options2={(this.props.search)?this.props.search.options2:[]}
+                  api = { api }
+                  reducer_empty={reducers.get}
+                  reducer={ searchReducer }
+                  suggest={ suggest }
+                  select={ select }
+                  filter={ filterS }
+                  sort={this.props.sort}
+                  page={page}
+                  listPage={listPage}
+                  onChange={this.searchOnChange}
+                  addFilter={this.addFilter}
+                  searchFilters={this.state.filters}
+                  triggerSearchOnChange={false}
+                />
+              </div>
+
+              <div id="date-filter" style={(isViewDate)?{}:{display:"none"}}>
+                <span>Filters</span>
+                <div id="date-filter-input">
+                  <input type="date" onChange={async (e) => {
+                      await this.changeDate(e);
+                      if (this.props.hasOwnProperty("changeDate")){
+                        this.props.changeDate(this.state.date);
+                      }
+                    }} data-type="from" value={this.state.date.from} />
+
+                  <input type="date" onChange={async (e) => {
+                      await this.changeDate(e);
+                      if (this.props.hasOwnProperty("changeDate")){
+                        this.props.changeDate(this.state.date);
+                      }
+                    }} data-type="to" value={this.state.date.to} />
+                </div> 
+              </div>
+
+              <div id="search-svg-button" style={{top:20}}>
+                <FaSearch className="clickable" onClick={() => {
+                  // this.props.GetList(this.props.api.get, reducers.get, 1, this.state.limit, filterP, this.props.sort);
+                  console.log(":::::::::::::::::)___");
+                  console.log(filterS);
+                  console.log(this.state.search.keyword);
+                  this.props.SearchData(suggest, api, this.state.search.type, this.state.search.keyword, searchReducer, reducers.get, select, filterS, this.props.sort, undefined, this.state.limit, true);
+                }}/>
+              </div>
+              {
+                (this.props.hasOwnProperty("addData") && this.props.addData != null)
+                  ?<div id="search-svg-button" style={{top:20}}>
+                      <FaPlus className="clickable" onClick={this.props.addData}/>
+                    </div>
+                  :""
+              }
+              <div id="search-svg-button">
+                <ReactToExcel
+                  table={(title.toLowerCase().split(" ").join("-")) + "-table"}
+                  filename={title.toUpperCase()}
+                  sheet="sheet 1"
+                  buttonText={<FaDownload />}
+                />
+              </div>
+              {
+                this.props.hasOwnProperty("upload")
+                  ? <div id="search-svg-button">
+                      <FaUpload onClick={this.props.upload.callback}/>
+                    </div>
+                  :""
+              }
+              {
+                (this.props.hasOwnProperty("reportToggle"))
+                  ?<div id="search-svg-button" style={{top:20}}>
+                    <FaChartBar className="clickable" onClick={() => {
+                      this.props.reportToggle();
+                    }}/>
+                  </div>
+                  :""
+              }
+              {
+                this.props.hasOwnProperty("trash")
+                  ? <div id="search-svg-button">
+                      <FaTrash onClick={this.props.trash.callback}/>
+                    </div>
+                  :""
+              }
+              {
+                this.props.hasOwnProperty("qrToggle")
+                  ? <div id="search-svg-button">
+                      <FaQrcode onClick={this.props.qrToggle}/>
+                    </div>
+                  :""
+              }              
+            </div>
+          </div>
+
+          <Collapse isOpen={this.state.isOpen}>
+            <div className="custom-container-title" id="table-header-filters">
+              <div className="col-md-12">
+                <Label style={{marginRight: "10px"}}>Filters: </Label> 
+                {
+                  this.state.filters.map(({value, type, typeText, keywordText}, i) => {
+                    return (
+                      <Badge style={{marginRight: "10px"}} color="primary" pill>
+                        {typeText + " | " + keywordText}
+                        <FaTimesCircle 
+                          className="filter-remove-icon"
+                          onClick={() => {
+                            this.removeFilter(i, value, type)
+                            console.log(":::::::::::::::::::''''''''''__________--");
+
+                            var keyword = this.state.search.keyword;
+
+                            console.log(keyword);
+                            console.log(value);
+
+                            if (value == keyword) {
+                              keyword = "";
+                              this.setState({
+                                search: {
+                                  ...this.state.search,
+                                  keyword: "",
+                                }
+                              });  
+                            }
+
+                            console.log(keyword);
+                            console.log(value);
+                            console.log(filterS);
+
+                            delete filterS[type];
+                            
+                            this.props.SearchData(suggest, api, this.state.search.type, keyword, searchReducer, reducers.get, select, filterS, this.props.sort, undefined, this.state.limit);
+                          }}
+                        />
+                      </Badge>
+                    )
+                  })
+                }
+              </div>              
+            </div>                
+          </Collapse>     

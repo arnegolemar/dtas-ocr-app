@@ -1,0 +1,7 @@
+export const SET_TEMP2 = 'SET_TEMP2';
+export const SET_SEARCHED_TEMP2S = 'SET_SEARCHED_TEMP2S';
+export const SET_TEMP2S = 'SET_TEMP2S';
+export const ADD_NEW_TEMP2 = 'ADD_NEW_TEMP2';
+export const SET_TEMP2_DETAIL = 'SET_TEMP2_DETAIL';
+export const SET_TEMP2_VALUE = 'SET_TEMP2_VALUE';
+export const SET_TEMP2_DEFAULT = 'SET_TEMP2_DEFAULT';
